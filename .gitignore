@@ -1,0 +1,63 @@
+# =========================
+# Python / Django
+# =========================
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Banco de dados local (cada um gera o seu com "python manage.py migrate")
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos coletados/enviados pelo Django
+staticfiles/
+media/
+
+# =========================
+# Ambientes virtuais
+# =========================
+venv/
+.venv/
+env/
+
+# =========================
+# Variáveis de ambiente
+# (versione apenas os arquivos .env.example)
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node / Vite
+# =========================
+node_modules/
+dist/
+dist-ssr/
+*.local
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# IDEs e sistema operacional
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
