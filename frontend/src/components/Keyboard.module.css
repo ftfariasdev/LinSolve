@@ -1,0 +1,13 @@
+.keyboardButton {
+  width: 48px !important;
+  height: 48px !important; 
+  min-width: 0 !important; 
+  max-width: 48px !important;
+  border-radius: 50% !important; 
+  
+  margin: 5px !important; 
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
