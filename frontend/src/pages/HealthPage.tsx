@@ -22,8 +22,7 @@ function HealthPage() {
 
       {error ? (
         <p className="error">
-          Não foi possível conectar ao backend. Verifique se ele está rodando em
-          http://localhost:8000.
+          Não foi possível conectar ao backend. Verifique se ele está rodando.
         </p>
       ) : health ? (
         <p className="success">
