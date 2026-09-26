@@ -1,5 +1,5 @@
 # =========================
-# Python / Django
+# Python
 # =========================
 __pycache__/
 *.py[cod]
@@ -9,14 +9,6 @@ __pycache__/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
-
-# Banco de dados local (cada um gera o seu com "python manage.py migrate")
-db.sqlite3
-db.sqlite3-journal
-
-# Arquivos coletados/enviados pelo Django
-staticfiles/
-media/
 
 # =========================
 # Ambientes virtuais
