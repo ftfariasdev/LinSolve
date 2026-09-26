@@ -4,10 +4,10 @@ Aplicação web para resolver sistemas de equações lineares, desenvolvida como
 
 O projeto é um monorepo com duas partes:
 
-- **backend/**: API REST em **Django** + **Django REST Framework**
+- **backend/**: API REST em **FastAPI**
 - **frontend/**: interface em **React** + **TypeScript**, criada com **Vite**
 
-> Por enquanto o projeto contém só a estrutura inicial: um endpoint de verificação (`GET /api/health/`) e uma tela que mostra se o frontend consegue falar com o backend.
+> Por enquanto o projeto contém a estrutura inicial: um endpoint de verificação (`GET /api/health/`), o endpoint `POST /api/linear-system/solve/` (por enquanto só responde `{"message": "não implementado"}`) e uma tela que mostra se o frontend consegue falar com o backend.
 
 ---
 
@@ -15,7 +15,7 @@ O projeto é um monorepo com duas partes:
 
 | Ferramenta | Versão mínima | Recomendada |
 | ---------- | ------------- | ----------- |
-| Python     | 3.12          | 3.14 (mais recente) |
+| Python     | 3.10          | 3.13 (mais recente) |
 | Node.js    | 22.12         | 24 LTS |
 | npm        | vem junto com o Node.js | |
 | Git        | qualquer versão recente | |
@@ -28,11 +28,11 @@ node --version
 npm --version
 ```
 
-> **Atenção:** o Django 6.1 **não funciona com Python 3.11 ou anterior**. É comum ter mais de uma versão instalada e o comando `python` apontar para uma antiga. No Windows, veja todas as versões com `py --list`. O passo 1 do backend explica como escolher a versão certa.
+> É comum ter mais de uma versão de Python instalada e o comando `python` apontar para uma antiga. No Windows, veja todas as versões com `py --list`.
 
 ---
 
-## Rodando o backend (Django)
+## Rodando o backend (FastAPI)
 
 Todos os comandos abaixo são executados **dentro da pasta `backend/`**:
 
@@ -42,15 +42,11 @@ cd backend
 
 ### 1. Criar o ambiente virtual (venv)
 
-O venv precisa ser criado com **Python 3.12 ou superior**. Por isso, escolha a versão explicitamente em vez de usar só `python`, que pode apontar para uma versão antiga.
-
 **Windows:** use o launcher `py` com a versão desejada (veja as instaladas com `py --list`):
 
 ```powershell
 py -3.13 -m venv venv
 ```
-
-> Troque `3.13` pela versão (3.12 ou superior) que você tiver instalada, por exemplo `py -3.14`.
 
 **Linux / Mac:**
 
@@ -58,9 +54,7 @@ py -3.13 -m venv venv
 python3 -m venv venv
 ```
 
-> Se `python3 --version` mostrar uma versão menor que 3.12, use o executável da versão certa, por exemplo `python3.13 -m venv venv`.
-
-**Criou o venv com a versão errada?** Rodar o comando de novo por cima **não resolve**, porque os pacotes antigos continuam na pasta. Recrie do zero com `--clear` (ex.: `py -3.13 -m venv --clear venv`) e repita os passos 2 e 3.
+**Criou o venv com a versão errada?** Rodar o comando de novo por cima **não resolve**, porque os pacotes antigos continuam na pasta. Recrie do zero com `--clear` (ex.: `py -3.13 -m venv --clear venv`) e repita o passo 2.
 
 ### 2. Ativar o ambiente virtual
 
@@ -93,7 +87,7 @@ source venv/bin/activate
 
 Com o venv ativo, o terminal passa a mostrar `(venv)` no início da linha. **Ative o venv sempre que abrir um terminal novo para trabalhar no backend.**
 
-Confira se o venv está com a versão certa. O comando abaixo deve mostrar 3.12 ou superior:
+Confira se o venv está com a versão certa:
 
 ```bash
 python --version
@@ -105,46 +99,16 @@ python --version
 pip install -r requirements.txt
 ```
 
-### 4. Criar o arquivo `.env`
-
-Copie o modelo `.env.example` para `.env`:
-
-**Windows:**
-
-```powershell
-copy .env.example .env
-```
-
-**Linux / Mac:**
+### 4. Iniciar o servidor
 
 ```bash
-cp .env.example .env
-```
-
-O `.env` guarda a `SECRET_KEY` e o `DEBUG`. Ele **não vai para o Git**, então cada um tem o seu.
-
-### 5. Aplicar as migrações (cria o banco SQLite local)
-
-```bash
-python manage.py migrate
-```
-
-### 6. Iniciar o servidor
-
-```bash
-python manage.py runserver
+uvicorn main:app --reload
 ```
 
 O backend fica disponível em **http://localhost:8000**. Para testar, abra http://localhost:8000/api/health/ no navegador. A resposta deve ser:
 
 ```json
 {"status": "ok", "message": "Backend funcionando"}
-```
-
-### Rodando os testes do backend
-
-```bash
-python manage.py test
 ```
 
 ---
@@ -178,7 +142,7 @@ Outros comandos úteis (dentro de `frontend/`):
 
 ## Testando se está tudo conectado
 
-1. Deixe o **backend** rodando (`python manage.py runserver`, porta 8000).
+1. Deixe o **backend** rodando (`uvicorn main:app --reload`, porta 8000).
 2. Deixe o **frontend** rodando (`npm run dev`, porta 5173).
 3. Abra **http://localhost:5173** no navegador.
 
@@ -188,29 +152,11 @@ Você deve ver o título **Calculadora de Sistemas Lineares** e a mensagem:
 
 Se aparecer a mensagem **"Não foi possível conectar ao backend..."**, o backend não está rodando (ou não está na porta 8000).
 
-**Como funciona a conexão:** o frontend sempre chama caminhos relativos como `/api/health/`. Em desenvolvimento, o servidor do Vite tem um *proxy* (configurado em `frontend/vite.config.ts`) que repassa tudo que começa com `/api` para o Django em `http://localhost:8000`. Por isso o frontend não precisa saber a porta do backend. O Django também está com CORS liberado para `http://localhost:5173` em modo de desenvolvimento.
+**Como funciona a conexão:** o frontend sempre chama caminhos relativos como `/api/health/`. Em desenvolvimento, o servidor do Vite tem um *proxy* (configurado em `frontend/vite.config.ts`) que repassa tudo que começa com `/api` para o FastAPI em `http://localhost:8000`. Por isso o frontend não precisa saber a porta do backend. O FastAPI também está com CORS liberado para `http://localhost:5173` em modo de desenvolvimento.
 
 ---
 
 ## Problemas comuns
-
-**`ImportError: cannot import name 'markcoroutinefunction' from 'inspect'`** (seguido de *"Couldn't import Django. Are you sure it's installed...?"*)
-
-O venv foi criado com Python 3.11 ou anterior. Repare no caminho do `inspect.py` no erro: ele mostra a versão usada (ex.: `Python311`). A segunda mensagem engana, porque o Django está instalado. O problema é a versão do Python. Para resolver, recrie o venv do zero com uma versão 3.12 ou superior e reinstale as dependências (dentro de `backend/`):
-
-```powershell
-deactivate
-py -3.13 -m venv --clear venv
-.\venv\Scripts\Activate.ps1
-python --version
-pip install -r requirements.txt
-```
-
-No Linux/Mac, use `python3.13 -m venv --clear venv` e `source venv/bin/activate`.
-
-**`django.core.exceptions.ImproperlyConfigured: SECRET_KEY não definida`**
-
-Falta o arquivo `backend/.env`. Veja o passo 4 do backend.
 
 **PowerShell: "a execução de scripts foi desabilitada neste sistema"**
 
@@ -218,7 +164,7 @@ Rode uma vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` e ative o ven
 
 **A tela mostra "Não foi possível conectar ao backend..."**
 
-O backend não está rodando, ou não está na porta 8000. Suba o backend com `python manage.py runserver` (com o venv ativo) e recarregue a página.
+O backend não está rodando, ou não está na porta 8000. Suba o backend com `uvicorn main:app --reload` (com o venv ativo) e recarregue a página.
 
 ---
 
@@ -226,21 +172,16 @@ O backend não está rodando, ou não está na porta 8000. Suba o backend com `p
 
 ```
 calculadora-sistemas-lineares/
-├── backend/                  # API em Django
-│   ├── config/               # Configuração do projeto Django
-│   │   ├── settings.py       #   configurações (apps, CORS, banco, leitura do .env)
-│   │   ├── urls.py           #   rotas principais: /admin/ e /api/
-│   │   └── asgi.py / wsgi.py #   pontos de entrada para servidores
-│   ├── apps/                 # Apps Django do projeto (cada funcionalidade em um app)
-│   │   └── core/             #   app de exemplo com o endpoint /api/health/
-│   │       ├── views.py      #     views (o que cada rota responde)
-│   │       ├── urls.py       #     rotas do app (incluídas sob /api/)
-│   │       ├── tests.py      #     testes do app
-│   │       ├── apps.py       #     configuração do app
-│   │       └── models.py, admin.py, migrations/  # padrão do Django (vazios por enquanto)
-│   ├── manage.py             # CLI do Django (runserver, migrate, test...)
+├── backend/                  # API em FastAPI
+│   ├── main.py               # ponto de entrada: instância do FastAPI e inclusão dos routers
+│   ├── api/
+│   │   └── routes/           #   endpoints (um arquivo por recurso)
+│   │       ├── health.py     #     GET /api/health/
+│   │       └── linear_system.py  # POST /api/linear-system/solve/ (não implementado)
+│   ├── schemas/              #   modelos Pydantic (request/response de cada rota)
+│   ├── services/             #   regras de negócio (sem depender do FastAPI)
 │   ├── requirements.txt      # Dependências Python com versões fixadas
-│   └── .env.example          # Modelo do arquivo .env
+│   └── venv/                 # ambiente virtual (não vai para o Git)
 │
 ├── frontend/                 # Interface em React + TypeScript (Vite)
 │   ├── public/               # Arquivos estáticos servidos como estão (imagens, ícones)
@@ -259,7 +200,7 @@ calculadora-sistemas-lineares/
 │   ├── tsconfig*.json        # Configuração do TypeScript
 │   └── .env.example          # Modelo do arquivo .env (opcional)
 │
-├── .gitignore                # Ignora venv, node_modules, .env, banco local, IDEs...
+├── .gitignore                # Ignora venv, node_modules, .env, IDEs...
 └── README.md
 ```
 
@@ -267,15 +208,14 @@ calculadora-sistemas-lineares/
 
 **Backend**
 
-- **Nova rota da API:** crie a view em `apps/<app>/views.py` e registre em `apps/<app>/urls.py`. Todas as rotas ficam automaticamente sob `/api/`.
-- **Novo app Django:** crie a pasta e o app dentro de `apps/`:
+O backend segue a separação clássica de responsabilidades: **rota → schema → service**.
 
-  ```bash
-  mkdir apps/nome_do_app
-  python manage.py startapp nome_do_app apps/nome_do_app
-  ```
+- **Novo endpoint:** crie (ou adicione em) um arquivo em `backend/api/routes/`, usando `APIRouter` com prefixo começando por `/api/`. A função da rota só deve receber o request, chamar o `service` e devolver o resultado — sem lógica de negócio ali.
+- **Formato de entrada/saída (request/response):** defina as classes Pydantic em `backend/schemas/`. É aqui que fica a validação do formato dos dados recebidos.
+- **Regra de negócio:** implemente em `backend/services/` como funções Python normais, sem depender do FastAPI. Isso deixa a lógica testável isoladamente, sem precisar subir o servidor.
+- **Registrar a rota:** depois de criar o router em `api/routes/`, inclua-o em `backend/main.py` com `app.include_router(...)`.
 
-  Depois, em `apps/nome_do_app/apps.py`, troque `name = 'nome_do_app'` por `name = 'apps.nome_do_app'`, adicione `'apps.nome_do_app'` em `INSTALLED_APPS` (`config/settings.py`) e inclua as rotas em `config/urls.py`.
+> Os nomes de arquivos, classes e variáveis do código ficam em inglês (mesmo padrão do frontend); textos voltados ao usuário continuam em português.
 
 **Frontend**
 
@@ -285,4 +225,4 @@ calculadora-sistemas-lineares/
 
 ### O que não vai para o Git
 
-O `.gitignore` já cuida disso, mas vale saber: **não versione** `venv/`, `node_modules/`, `dist/`, `db.sqlite3` nem arquivos `.env`. Cada integrante gera esses arquivos localmente seguindo os passos acima.
+O `.gitignore` já cuida disso, mas vale saber: **não versione** `venv/` nem `node_modules/`/`dist/`. Cada integrante gera essas pastas localmente seguindo os passos acima.
