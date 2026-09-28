@@ -36,7 +36,7 @@ function AlphabeticKeyboard() {
   }, []);
 
   return(
-    <div className={styles.keyboardGrid}>
+    <div className={styles.alphabeticKeyboardGrid}>
       { ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'].map((x) => {
         // Verifica se este botão específico é o que deve brilhar/mudar de cor
         const isKeyPressed = activeKey === x;
@@ -47,7 +47,7 @@ function AlphabeticKeyboard() {
             value={x}
             onClick={() => handleStrInput(x)}
             variant="contained"
-            className={`${styles.keyboardButton} ${isKeyPressed ? styles.activeKey : ""} ${x === '' ? styles.zeroKey : ""}`}
+            className={`${styles.keyboardButton} ${isKeyPressed ? styles.activeKey : ""} ${x === 'j' ? styles.lastKey : ""}`}
           >
             {x}
       </Button>

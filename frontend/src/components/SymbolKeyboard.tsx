@@ -44,10 +44,10 @@ function SymbolKeyboard() {
     };
   }, []);
 
-  const keys = ["+", "-", "=", ".", "⌫", "C", "↵"];
+  const keys = ['+', '⌫', '-', 'C', '.', '↵', '='];
 
   return (
-    <div className={styles.keyboardGrid}>
+    <div className={styles.operatorKeyboardGrid}>
       {keys.map((key) => {
         const isKeyPressed = activeKey === key;
 
