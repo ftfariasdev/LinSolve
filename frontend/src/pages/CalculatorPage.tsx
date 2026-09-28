@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiFetch } from '../api/client.ts'
 import { NumericKeyboard } from '../components/NumericKeyboard.jsx'
+import { SymbolKeyboard } from '../components/SymbolKeyboard.tsx'
 
 type HealthResponse = {
   status: string
@@ -13,6 +14,7 @@ function CalculatorPage() {
       <h1>Calculadora de Sistemas Lineares</h1>
 
       <NumericKeyboard />
+      <SymbolKeyboard />
     </main>
   )
 }
