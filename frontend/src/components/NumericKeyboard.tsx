@@ -35,22 +35,26 @@ function NumericKeyboard() {
     };
   }, []);
 
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((x) => {
-    // Verifica se este botão específico é o que deve brilhar/mudar de cor
-    const isKeyPressed = activeKey === x;
+  return(
+    <div className={styles.numericKeyboardGrid}>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((x) => {
+      // Verifica se este botão específico é o que deve brilhar/mudar de cor
+      const isKeyPressed = activeKey === x;
 
-    return (
-      <Button
-        key={x}
-        value={x}
-        onClick={() => handleNumberInput(x)}
-        variant="contained"
-        className={`${styles.keyboardButton} ${isKeyPressed ? styles.activeKey : ""}`}
-      >
-        {x}
-      </Button>
-    );
-  });
+      return (
+        <Button
+          key={x}
+          value={x}
+          onClick={() => handleNumberInput(x)}
+          variant="contained"
+          className={`${styles.keyboardButton} ${isKeyPressed ? styles.activeKey : ""} ${x === 0 ? styles.zeroKey : ""}`}
+        >
+          {x}
+        </Button>
+      );
+    })}
+    </div>
+  );
 }
 
 export { NumericKeyboard };

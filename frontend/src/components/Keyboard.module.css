@@ -1,13 +1,61 @@
 .keyboardButton {
   width: 48px !important;
-  height: 48px !important; 
-  min-width: 0 !important; 
+  height: 48px !important;
+  min-width: 0 !important;
   max-width: 48px !important;
-  border-radius: 50% !important; 
-  
-  margin: 5px !important; 
+  border-radius: 50% !important;
+  margin: 5px !important;
 
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+/* TÍTULO DA CALCULADORA
+.pageTitle {
+  text-align: center;
+} */
+
+/* TECLADO NUMÉRICO */
+.numericKeyboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  gap: 10px;
+  width: fit-content;
+  margin-right: 30px;
+}
+
+/* ESTILO PARA A TECLA DO 0 */
+.zeroKey {
+  grid-column: 2;
+}
+
+/* TECLADO ALFABÉTICO */
+.alphabeticKeyboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  gap: 10px;
+  width: fit-content;
+  margin-right: 30px;
+}
+
+/* ESTILO PARA A TECLA DO J */
+.lastKey {
+  grid-column: 2;
+}
+
+/* OPERADORES */
+.operatorKeyboardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 48px);
+  gap: 10px;
+  width: fit-content;
+}
+
+/* CONTAINER DOS TECLADOS */
+.keyboardContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: fit-content;
 }
