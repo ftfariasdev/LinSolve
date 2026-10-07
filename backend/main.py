@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,9 +9,14 @@ from api.routes import health, linear_system
 
 app = FastAPI()
 
+# Endereços do frontend que podem chamar a API, separados por vírgula.
+# Em desenvolvimento é o servidor do Vite; em produção, a variável de ambiente
+# CORS_ORIGINS traz o endereço público do frontend.
+cors_origins = os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[origin.strip() for origin in cors_origins],
     allow_methods=["*"],
     allow_headers=["*"],
 )
