@@ -23,8 +23,8 @@ interpreta texto de equação.
 `POST /api/linear-system/solve/`
 
 ```
-2x + 3y - 1z = 5
-1x - 1y + 2z = 3
+2x + 3y - z = 5
+x - y + 2z = 3
 ```
 
 ```json
@@ -72,8 +72,9 @@ Resposta:
 
 Cada linha do campo é uma equação:
 
-- antes do `=`: termos na ordem coeficiente → incógnita → operador (`2x+3y-1z`);
+- antes do `=`: termos na ordem coeficiente → incógnita → operador (`2x+3y-z`);
 - depois do `=`: só o termo independente, um número com sinal opcional;
-- toda incógnita precisa de coeficiente (`1x`, não `x`);
+- incógnita sem coeficiente vale 1 (`x` é o mesmo que `1x`);
+- o coeficiente não pode ser `0` (`0x` é erro);
 - uma incógnita não pode aparecer duas vezes na mesma equação;
 - decimais usam ponto (`0.5`).

@@ -6,7 +6,8 @@
 //
 //   - antes do "=": termos na ordem coeficiente → incógnita → operador;
 //   - depois do "=": só o termo independente (um número, com sinal opcional);
-//   - toda incógnita precisa de coeficiente (escreva 1x, não x);
+//   - incógnita sem coeficiente vale 1 (x é o mesmo que 1x);
+//   - o coeficiente não pode ser 0;
 //   - uma incógnita não pode aparecer duas vezes na mesma equação.
 //
 // O resultado final segue o contrato da issue #1: a matriz de coeficientes e
@@ -91,13 +92,15 @@ export function checkLine(line: string): LineCheck {
       if (last === 'term') {
         return error(`Falta um operador (+ ou -) antes de "${token}".`)
       }
-      if (last !== 'number') {
-        return error(`Falta o coeficiente de "${token}" (escreva 1${token}).`)
+      // Sem número antes, o coeficiente é 1: "x" vale "1x" e "-x" vale "-1x".
+      const coefficient = last === 'number' ? Number(number) : 1
+      if (coefficient === 0) {
+        return error(`O coeficiente de "${token}" não pode ser 0.`)
       }
       if (token in coefficients) {
         return error(`A incógnita "${token}" aparece mais de uma vez na equação.`)
       }
-      coefficients[token] = sign * Number(number)
+      coefficients[token] = sign * coefficient
       sign = 1
       last = 'term'
     } else if (isOperator(token)) {
@@ -137,7 +140,7 @@ export function checkLine(line: string): LineCheck {
     if (last === 'term') {
       return incomplete('Falta o "=" e o termo independente.')
     }
-    return incomplete('Falta um termo (coeficiente e incógnita).')
+    return incomplete('Falta um termo, por exemplo 2x.')
   }
   if (constant === null) {
     return incomplete('Falta o termo independente depois do "=".')
