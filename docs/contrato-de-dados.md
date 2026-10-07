@@ -58,6 +58,13 @@ Resposta:
 - `solucao`: um valor por incógnita, na ordem das colunas, quando o sistema é
   SPD; `null` nos outros casos.
 
+Erros:
+
+- Entrada inválida (sem equações, equações com tamanhos diferentes, quantidade
+  de termos independentes diferente da de equações, valor que não é número):
+  status `400` com `{"detail": "mensagem explicando o problema"}`.
+- Erro inesperado: status `500` com uma mensagem genérica em `detail`.
+
 ## 3. Estratégia de escalonamento
 
 - Eliminação de Gauss **sem troca de linhas**, exceto quando o pivô da linha

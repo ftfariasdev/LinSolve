@@ -7,7 +7,7 @@ O projeto é um monorepo com duas partes:
 - **backend/**: API REST em **FastAPI**
 - **frontend/**: interface em **React** + **TypeScript**, criada com **Vite**
 
-> Por enquanto o projeto contém a estrutura inicial: um endpoint de verificação (`GET /api/health/`), o endpoint `POST /api/linear-system/solve/` (por enquanto só responde `{"message": "não implementado"}`) e uma tela que mostra se o frontend consegue falar com o backend.
+> O usuário digita o sistema na tela, o frontend monta a matriz e chama `POST /api/linear-system/solve/`, e o backend devolve o sistema escalonado, a classificação (SPD, SPI ou SI) e a solução. O formato dos dados está em [docs/contrato-de-dados.md](docs/contrato-de-dados.md).
 
 ---
 
@@ -144,7 +144,7 @@ Outros comandos úteis (dentro de `frontend/`):
 
 1. Deixe o **backend** rodando (`uvicorn main:app --reload`, porta 8000).
 2. Deixe o **frontend** rodando (`npm run dev`, porta 5173).
-3. Abra **http://localhost:5173** no navegador.
+3. Abra **http://localhost:5173/health** no navegador.
 
 Você deve ver o título **Calculadora de Sistemas Lineares** e a mensagem:
 
@@ -177,7 +177,7 @@ calculadora-sistemas-lineares/
 │   ├── api/
 │   │   └── routes/           #   endpoints (um arquivo por recurso)
 │   │       ├── health.py     #     GET /api/health/
-│   │       └── linear_system.py  # POST /api/linear-system/solve/ (não implementado)
+│   │       └── linear_system.py  # POST /api/linear-system/solve/
 │   ├── schemas/              #   modelos Pydantic (request/response de cada rota)
 │   ├── services/             #   regras de negócio (sem depender do FastAPI)
 │   ├── requirements.txt      # Dependências Python com versões fixadas
