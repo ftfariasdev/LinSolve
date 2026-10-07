@@ -156,6 +156,18 @@ Se aparecer a mensagem **"Não foi possível conectar ao backend..."**, o backen
 
 ---
 
+## Publicando online
+
+O frontend e o backend são publicados separados, e os dois republicam sozinhos a cada push na `main`.
+
+1. **Frontend na Vercel:** em https://vercel.com, *Add New > Project*, importe este repositório e defina **Root Directory** como `frontend`. Anote o endereço gerado (ex.: `https://linsolve.vercel.app`).
+2. **Backend no Render:** em https://render.com, *New > Blueprint* e escolha este repositório (a configuração está em `render.yaml`). Quando pedir `CORS_ORIGINS`, informe o endereço do frontend do passo 1. Anote o endereço gerado (ex.: `https://linsolve-api.onrender.com`).
+3. **Ligar os dois:** na Vercel, em *Settings > Environment Variables*, crie `VITE_API_URL` com o endereço do backend do passo 2 e faça um novo deploy (*Deployments > Redeploy*).
+
+> No plano gratuito do Render o backend "dorme" depois de um tempo sem uso; a primeira resolução depois disso pode demorar cerca de um minuto.
+
+---
+
 ## Problemas comuns
 
 **PowerShell: "a execução de scripts foi desabilitada neste sistema"**
