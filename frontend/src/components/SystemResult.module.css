@@ -1,0 +1,97 @@
+.result {
+  margin-top: 32px;
+}
+
+/* CLASSIFICAÇÃO: uma cor para cada caso */
+.classification {
+  padding: 12px 16px;
+  border-left: 4px solid;
+  border-radius: 6px;
+}
+
+.classification h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.classification p {
+  margin: 0;
+}
+
+.spd {
+  border-color: #1a7f37;
+  background-color: #dafbe1;
+}
+
+.spi {
+  border-color: #9a6700;
+  background-color: #fff8c5;
+}
+
+.si {
+  border-color: #cf222e;
+  background-color: #ffebe9;
+}
+
+.blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+}
+
+.blocks h3 {
+  margin: 24px 0 8px;
+  font-size: 1rem;
+}
+
+/* MATRIZ AUMENTADA */
+.matrixScroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.matrix {
+  border-collapse: collapse;
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+}
+
+.matrix th {
+  padding: 2px 14px;
+  color: #6e7781;
+  font-weight: normal;
+}
+
+.matrix td {
+  padding: 4px 14px;
+  text-align: right;
+}
+
+/* Colchetes em volta dos números */
+.matrix tbody {
+  border-left: 2px solid #1f2328;
+  border-right: 2px solid #1f2328;
+}
+
+/* Barra que separa os coeficientes do termo independente */
+.matrix th:last-child,
+.matrix td:last-child {
+  border-left: 1px solid #1f2328;
+}
+
+.matrix thead th:last-child {
+  border-left-color: transparent;
+}
+
+.solution {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 1.1rem;
+}
+
+.noSolution {
+  margin: 0;
+  max-width: 260px;
+  color: #6e7781;
+}

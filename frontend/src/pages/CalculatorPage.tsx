@@ -3,6 +3,7 @@ import { NumericKeyboard } from '../components/NumericKeyboard.jsx'
 import { AlphabeticKeyboard } from '../components/AlphabeticKeyboard.tsx'
 import { SymbolKeyboard } from '../components/SymbolKeyboard.tsx'
 import { SystemInput } from '../components/SystemInput.tsx'
+import { SystemResult } from '../components/SystemResult.tsx'
 import type { SolvedSystem } from '../api/linearSystem.ts'
 import { applyKey } from '../utils/systemParser.ts'
 import styles from '../components/Keyboard.module.css'
@@ -35,20 +36,7 @@ function CalculatorPage() {
 
       </div>
 
-      {/* Provisório: o componente de resultado (issue #10) entra aqui e recebe "solved" */}
-      {solved && (
-        <section>
-          <h2>Resultado</h2>
-          <p>Classificação: {solved.result.classificacao}</p>
-          {solved.result.solucao && (
-            <p>
-              {solved.unknowns
-                .map((unknown, index) => `${unknown} = ${solved.result.solucao?.[index]}`)
-                .join(', ')}
-            </p>
-          )}
-        </section>
-      )}
+      {solved && <SystemResult solved={solved} />}
     </main>
   )
 }
