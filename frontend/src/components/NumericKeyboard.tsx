@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import styles from "./Keyboard.module.css";
 
-function NumericKeyboard() {
+type NumericKeyboardProps = {
+  // Chamada a cada dígito digitado (na tela ou no teclado físico)
+  onKey: (key: string) => void;
+};
+
+function NumericKeyboard({ onKey }: NumericKeyboardProps) {
   // Estado para rastrear qual tecla física está sendo pressionada
   const [activeKey, setActiveKey] = useState<number | null>(null);
 
   // Função centralizada para lidar com o clique do número
   const handleNumberInput = (number: number) => {
-    console.log(number);
+    onKey(String(number));
   }
 
   useEffect(() => {
@@ -19,7 +24,7 @@ function NumericKeyboard() {
         // Ativa o estado visual da tecla correspondente
         setActiveKey(number);
         // Executa a mesma lógica do onClick
-        handleNumberInput(number);
+        onKey(String(number));
         setTimeout(() => {
           setActiveKey(null);
         }, 100); // Remove o estado ativo após 100ms
@@ -33,7 +38,7 @@ function NumericKeyboard() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [onKey]);
 
   return(
     <div className={styles.numericKeyboardGrid}>

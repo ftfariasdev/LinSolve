@@ -2,24 +2,32 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import styles from "./Keyboard.module.css";
 
-function AlphabeticKeyboard() {
+type AlphabeticKeyboardProps = {
+  // Chamada a cada letra digitada (na tela ou no teclado físico)
+  onKey: (key: string) => void;
+};
+
+function AlphabeticKeyboard({ onKey }: AlphabeticKeyboardProps) {
   // Estado para rastrear qual tecla física está sendo pressionada
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
   // Função centralizada para lidar com o clique do número
   const handleStrInput = (str: string) => {
-    console.log(str);
+    onKey(str);
   }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Atalhos como Ctrl+R não são entrada de texto
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
       // Verifica se a tecla digitada é uma letra do alfabeto
       if (/^[a-zA-Z]$/.test(event.key)) {
         const key = event.key.toLowerCase(); // Converte para minúscula para consistência
         // Ativa o estado visual da tecla correspondente
         setActiveKey(key);
         // Executa a mesma lógica do onClick
-        handleStrInput(key);
+        onKey(key);
         setTimeout(() => {
           setActiveKey(null);
         }, 100); // Remove o estado ativo após 100ms
@@ -33,7 +41,7 @@ function AlphabeticKeyboard() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [onKey]);
 
   return(
     <div className={styles.alphabeticKeyboardGrid}>
